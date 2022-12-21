@@ -52,7 +52,8 @@ frame_ending.pack(pady=20, padx=60, fill='both', expand=True)
 label_select_output_file = customtkinter.CTkLabel(master=frame_ending, text='', font=(config['font_style'], config['font_size']))
 label_select_output_file.grid(row=0, column=0, pady=20, padx=30)
 
-button_select_output_file = customtkinter.CTkButton(master=frame_ending, text=)
+button_select_output_file = customtkinter.CTkButton(master=frame_ending, text='Select output file', font=(config['font_style'], config['font_size']), command=lambda: button_select_file_command(label_select_output_file))
+button_select_output_file.grid(row=0, column=1, pady=20, padx=30)
 
 root.mainloop()
 

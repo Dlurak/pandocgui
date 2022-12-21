@@ -1,0 +1,12 @@
+{
+    ".bib": "bibtex",
+    ".bst": "biblatex",
+    ".html": "html",
+    ".ipynb": "ipynb",
+    ".csv": "csv",
+    ".tsv": "tsv",
+    ".docx": "docx",
+    
+    ".md": "markdown",
+    ".markdown": "markdown"
+}
