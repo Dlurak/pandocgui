@@ -8,25 +8,35 @@ with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.json
     config = json.load(json_file)
 
 
-def select_file():
+def select_file(input_f:bool):
     filetypes = (
-        ('All files', '*.*'),
+        ('Supported Filetypes', '*.md *.markdown *.docx *.html *.odt *.tex *.epub *.ipynb *.csv *.bib *.bst'),
         ('Markdown files', '*.md *.markdown *.'),
         ('Word files', '*.docx'),
         ('Websites', '*html'),
         ('Open Ofice files', '*.odt'),
         ('LaTeX files', '*tex'),
-        ('E-Books', '*.epub')
+        ('E-Books', '*.epub'),
+        ("Jupyter Notebooks", '*.ipynb'),
+        ("CSV", '*.csv'),
+        ('BibTeX', '*.bib'),
+        ('BibLaTex', '*.bst')
     )
-    filename = filedialog.askopenfilename(
-        title='Select an input file',
-        filetypes=filetypes
-    )
+    if input_f:
+        filename = filedialog.askopenfilename(
+            title='Select an input file',
+            filetypes=filetypes
+        )
+    else:
+        filename = filedialog.asksaveasfilename(
+            title='Save',
+            filetypes=filetypes
+        )
     return filename
 
 files = {'input_file': None, 'output_file': None}
 def button_select_file_command(label, input_f:bool):
-    file = select_file()
+    file = select_file(input_f)
     if file == '':
         return
 
@@ -38,6 +48,23 @@ def button_select_file_command(label, input_f:bool):
     if files['input_file'] and files['output_file']:
         button_convert.configure(state=customtkinter.NORMAL)
     label.configure(text=file)
+
+def button_convert_command(files):
+    try:
+        convert.convert(files)
+    except FileExistsError:
+        label_user_info.configure(text='Pandoc isn\'t installed', text_color='red')
+        return
+    except KeyError:
+        label_user_info.configure(text='At least one of the file exstensions isn\'t supportet by this programm and/or by pandoc', text_color='red')
+        return
+    else:
+        label_user_info.configure(text='Successfully converted the file.', text_color='white')
+        files = {'input_file': None, 'output_file': None}
+        label_select_input_file.configure(text='')
+        label_select_output_file.configure(text='')
+        button_convert.configure(state=customtkinter.DISABLED)
+
 
 customtkinter.set_appearance_mode('system') # set some styles
 customtkinter.set_default_color_theme('dark-blue')
@@ -72,14 +99,21 @@ button_select_output_file.grid(row=0, column=1, pady=20, padx=30)
 frame_convert = customtkinter.CTkFrame(master=root)
 frame_convert.pack(pady=20, padx=60, fill='both', expand=True)
 
+label_user_info = customtkinter.CTkLabel(
+    master=frame_convert,
+    text='',
+    font=(config['font_style'], config['font_size'])
+)
+label_user_info.pack(pady=10, padx=40)
+
 button_convert = customtkinter.CTkButton(
     master=frame_convert,
     text='Convert',
     font=(config['font_style'], config['font_size']),
     state=customtkinter.DISABLED,
-    command=lambda: convert.convert(files)
+    command=lambda: button_convert_command(files)
 )
-button_convert.pack(pady=40, padx=60)
+button_convert.pack(pady=20, padx=60)
 
 root.mainloop()
 
