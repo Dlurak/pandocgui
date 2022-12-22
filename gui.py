@@ -1,4 +1,5 @@
 import  customtkinter
+import tkinter
 from customtkinter import filedialog
 import json
 import os
@@ -23,7 +24,8 @@ def select_file(input_f:bool):
         )
     return filename
 
-files = {'input_file': None, 'output_file': None}
+files = {'input_file': None, 'output_file': None, 'toc': False}
+
 def button_select_file_command(label, input_f:bool):
     file = select_file(input_f)
     if file == '':
@@ -46,16 +48,26 @@ def button_convert_command(files):
         return
     else:
         label_user_info.configure(text='Successfully converted the file.', text_color='white')
-        files = {'input_file': None, 'output_file': None}
+        files['input_file'] = None
+        files['output_file'] = None
         label_select_input_file.configure(text='')
         label_select_output_file.configure(text='')
         button_convert.configure(state=customtkinter.DISABLED)
 
+def set_variable(variable_name:str, variable_value, key=None):
+    if isinstance(globals()[variable_name], dict) and not (key is None):
+        globals()[variable_name][key] = variable_value
+    else:
+        globals()[variable_name] = variable_value
+    
 
 customtkinter.set_appearance_mode('system') # set some styles
 customtkinter.set_default_color_theme('dark-blue')
 
 root = customtkinter.CTk()
+
+toc = customtkinter.BooleanVar(False)
+
 
 # place the windows in the middle
 config['width_screen'] = root.winfo_screenwidth()
@@ -81,6 +93,21 @@ label_select_output_file.grid(row=0, column=0, pady=20, padx=30)
 button_select_output_file = customtkinter.CTkButton(master=frame_ending, text='Select output file', font=(config['font_style'], config['font_size']), command=lambda: button_select_file_command(label_select_output_file, False))
 button_select_output_file.grid(row=0, column=1, pady=20, padx=30)
 
+checkbox_toc = customtkinter.CTkCheckBox(
+    master=frame_ending,
+    text='Table of content',
+    variable=toc,
+    onvalue=True,
+    offvalue=False,
+    command=lambda: set_variable('files', toc.get(), 'toc')
+)
+checkbox_toc.grid(
+    row=1,
+    column=0,
+    columnspan=2,
+    pady=20,
+    padx=30
+)
 
 frame_convert = customtkinter.CTkFrame(master=root)
 frame_convert.pack(pady=20, padx=60, fill='both', expand=True)

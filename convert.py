@@ -11,7 +11,11 @@ def convert(arguments:dict):
         raise FileExistsError('pandoc is not installed')
     
 
-    arguments = ['pandoc', '-s', arguments['input_file'], '-o', arguments['output_file']]
-    subprocess.run(arguments)
+    arguments_list = ['pandoc', '-s', arguments['input_file'], '-o', arguments['output_file']]
+
+    if arguments['toc']:
+        arguments_list.append('--toc')
+
+    subprocess.run(arguments_list)
 
 
