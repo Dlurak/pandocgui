@@ -6,22 +6,11 @@ import convert
 
 with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.json'), 'r') as json_file: # write the content of the config to the var config
     config = json.load(json_file)
-
+with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'file_types.json'), 'r') as json_file: # write the content of file_types.json to file_types
+    file_types = json.load(json_file)
 
 def select_file(input_f:bool):
-    filetypes = (
-        ('Supported Filetypes', '*.md *.markdown *.docx *.html *.odt *.tex *.epub *.ipynb *.csv *.bib *.bst'),
-        ('Markdown files', '*.md *.markdown *.'),
-        ('Word files', '*.docx'),
-        ('Websites', '*html'),
-        ('Open Ofice files', '*.odt'),
-        ('LaTeX files', '*tex'),
-        ('E-Books', '*.epub'),
-        ("Jupyter Notebooks", '*.ipynb'),
-        ("CSV", '*.csv'),
-        ('BibTeX', '*.bib'),
-        ('BibLaTex', '*.bst')
-    )
+    filetypes = file_types.items()
     if input_f:
         filename = filedialog.askopenfilename(
             title='Select an input file',
@@ -54,9 +43,6 @@ def button_convert_command(files):
         convert.convert(files)
     except FileExistsError:
         label_user_info.configure(text='Pandoc isn\'t installed', text_color='red')
-        return
-    except KeyError:
-        label_user_info.configure(text='At least one of the file exstensions isn\'t supportet by this programm and/or by pandoc', text_color='red')
         return
     else:
         label_user_info.configure(text='Successfully converted the file.', text_color='white')

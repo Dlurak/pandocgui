@@ -1,0 +1,20 @@
+{
+    "All files": "*.*",
+
+    "Markdown files": "*.md *.markdown",
+    "Lightweight markup formats": "*.md *.markdown *.rst *.adoc *.asciidoc *.txt *.textile *.t2t",
+
+    "Word processor formats": "*.docx *.docm *.doc *.rtf *odt",
+    
+    "Interactive notebooks": "*.ipynb",
+
+    "HTML formats": "*.html *.htm *.xthml *.xtm",
+    
+    "E-Books": "*.epub *.fb2 *.fb2.zip *.fbz",
+
+    "Roff formats": ".roff",
+
+    "TeX formats": "*.tex",
+
+    "Bibliography formats": "*.bib *.bst"
+}
